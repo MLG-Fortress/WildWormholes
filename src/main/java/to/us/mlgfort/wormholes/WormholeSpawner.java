@@ -46,7 +46,7 @@ public class WormholeSpawner implements Listener
         if (r4nd0m(0, 5) > 4)
             return;
 
-        Location location = event.getChunk().getBlock(ThreadLocalRandom.current().nextInt(16), 255, ThreadLocalRandom.current().nextInt(16)).getLocation();
+        Location location = event.getChunk().getBlock(ThreadLocalRandom.current().nextInt(16), 64, ThreadLocalRandom.current().nextInt(16)).getLocation();
 
         location.setY(location.getWorld().getHighestBlockYAt(location));
 
@@ -60,8 +60,19 @@ public class WormholeSpawner implements Listener
     private Location randomLocation(Location initialLocation)
     {
         World world = worlds.get(r4nd0m(0, worlds.size()));
-        Location borderCenter = world.getWorldBorder().getCenter();
-        int borderSize = (int)world.getWorldBorder().getSize() - 1000; //i.e. world must have a border size far above 1000
+        Location borderCenter;
+        int borderSize;
+        if (world.getWorldBorder() == null || world.getWorldBorder().getCenter() == null) //Apparently this can be null......
+        {
+            borderCenter = new Location(world, 0, 0, 0);
+            borderSize = 14999990;
+        }
+        else
+        {
+            borderCenter = world.getWorldBorder().getCenter();
+            borderSize = (int)world.getWorldBorder().getSize() - 1000; //i.e. world must have a border size far above 1000
+        }
+
 
         int randomX = r4nd0m(borderCenter.getBlockX() - borderSize, borderCenter.getBlockX() + borderSize);
         int randomZ = r4nd0m(borderCenter.getBlockZ() - borderSize, borderCenter.getBlockZ() + borderSize);
