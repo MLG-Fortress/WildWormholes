@@ -1,6 +1,8 @@
 package to.us.mlgfort.wormholes;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -16,39 +18,103 @@ public class Wormhole
     private Wormhole otherSide;
     private Location location;
 
-    private int duration;
-    private int mass;
+    private Integer duration;
+    private Integer mass;
 
-    public Wormhole(int initialDuration, int initialMass, JavaPlugin instance)
+    public Wormhole(int initialDuration, int initialMass, Location initialLocation, Location destinationLocation)
     {
         this.duration = initialDuration;
         this.mass = initialMass;
-        new BukkitRunnable()
-        {
-            @Override
-            public void run()
-            {
-                duration--;
-            }
-        }.runTask(instance);
+        this.location = initialLocation;
+        this.otherSide = new Wormhole(this, destinationLocation);
+    }
+
+    private Wormhole(Wormhole wormhole, Location location)
+    {
+        this.location = location;
+        this.otherSide = wormhole;
+    }
+
+    public Wormhole getOtherSide()
+    {
+        return otherSide;
+    }
+
+    public Location getLocation()
+    {
+        return location.clone();
     }
 
     public int getMass()
     {
-        return mass;
+        if (mass != null)
+            return mass;
+        return otherSide.mass;
     }
 
-    public void setMass(int mass)
+    public void reduceMass(int massToRemove)
     {
-        this.mass = mass;
+        if (this.mass != null)
+            this.mass -= massToRemove;
+        else
+            otherSide.mass -= massToRemove;
     }
 
     public int getDuration()
     {
-        return duration;
+        if (this.duration != null)
+            return duration;
+        return otherSide.duration;
     }
 
-    public boolean buildWormhole()
+    /**
+     * Decreases duration of wormhole
+     * @return if wormhole should've expired
+     */
+    public boolean tick()
+    {
+        duration--;
+        return duration < 0;
+    }
+
+    public void build()
+    {
+        int size = 3;
+        int x = location.getBlockX();
+        int y = location.getBlockY();
+        y++;
+        int z = location.getBlockZ();
+        World world = location.getWorld();
+
+        //Outer bedrock perimeter
+        //Lazy way = set all of it to bedrock
+        for (int x1 = x - size; x1 < x + size; x1++)
+        {
+            for (int z1 = z - size; z1 < z + size; z1++)
+                world.getBlockAt(x1, location.getBlockY(), z1).setType(Material.BEDROCK);
+        }
+
+        //Clear out blocks above with a TRIPLE FOR-LOOP
+        for (int x1 = x - size; x1 < x + size; x1++)
+        {
+            for (int z1 = z - size; z1 < z + size; z1++)
+            {
+                for (int y1 = y; y1 < y + 3; y1++)
+                    world.getBlockAt(x1, y1, z1).setType(Material.AIR);
+            }
+        }
+
+        size--;
+
+        //Inner portal blocks
+        for (int x1 = x - size; x1 < x + size; x1++)
+        {
+            for (int z1 = z - size; z1 < z + size; z1++)
+                world.getBlockAt(x1, location.getBlockY(), z1).setType(Material.ENDER_PORTAL);
+        }
+    }
+
+    public void destroy()
     {
 
     }
