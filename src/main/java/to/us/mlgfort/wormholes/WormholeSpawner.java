@@ -63,8 +63,8 @@ public class WormholeSpawner implements Listener
         Location borderCenter = world.getWorldBorder().getCenter();
         int borderSize = (int)world.getWorldBorder().getSize() - 1000; //i.e. world must have a border size far above 1000
 
-        int randomX = r4nd0m(borderCenter.getBlockX() + borderSize, borderCenter.getBlockX() - borderSize);
-        int randomZ = r4nd0m(borderCenter.getBlockZ() + borderSize, borderCenter.getBlockZ() - borderSize);
+        int randomX = r4nd0m(borderCenter.getBlockX() - borderSize, borderCenter.getBlockX() + borderSize);
+        int randomZ = r4nd0m(borderCenter.getBlockZ() - borderSize, borderCenter.getBlockZ() + borderSize);
 
         Location location = new Location(world, randomX, r4nd0m(10, 200), randomZ);
 
