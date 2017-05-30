@@ -2,6 +2,8 @@ package to.us.mlgfort.wormholes;
 
 import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -13,7 +15,19 @@ import java.util.Set;
  */
 public class Thera
 {
-    Set<Wormhole> wormholes = new HashSet<>();
+    private Set<Wormhole> wormholes = new HashSet<>();
+
+    public Thera(JavaPlugin plugin)
+    {
+        new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                wormholeMaintenanceTask();
+            }
+        }.runTaskTimer(plugin, 20L, 20L);
+    }
 
     public void addWormhole(int initialDuration, int initialMass, Location initialLocation, Location destinationLocation)
     {
@@ -36,7 +50,14 @@ public class Thera
 
     public Wormhole getWormhole(Location location)
     {
-
+        for (Wormhole wormhole : wormholes)
+        {
+            if (wormhole.isCloseEnough(location))
+            {
+                return wormhole;
+            }
+        }
+        return null;
     }
 
     public void buildWormholes(Chunk chunk)
@@ -46,10 +67,5 @@ public class Thera
             if (wormhole.getLocation().getChunk() == chunk)
                 wormhole.build();
         }
-    }
-
-    public boolean isNearPortal(Location location)
-    {
-
     }
 }

@@ -15,6 +15,7 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class Wormhole
 {
+    private final int size = 3;
     private Wormhole otherSide;
     private Location location;
 
@@ -79,7 +80,6 @@ public class Wormhole
 
     public void build()
     {
-        int size = 3;
         int x = location.getBlockX();
         int y = location.getBlockY();
         y++;
@@ -104,10 +104,8 @@ public class Wormhole
             }
         }
 
-        size--;
-
         //Inner portal blocks
-        for (int x1 = x - size; x1 < x + size; x1++)
+        for (int x1 = x - (size - 1); x1 < x + (size - 1); x1++)
         {
             for (int z1 = z - size; z1 < z + size; z1++)
                 world.getBlockAt(x1, location.getBlockY(), z1).setType(Material.ENDER_PORTAL);
@@ -119,17 +117,8 @@ public class Wormhole
 
     }
 
-    public boolean isWithin()
+    public boolean isCloseEnough(Location location)
     {
-
-    }
-
-    /**
-     *
-     * @return
-     */
-    public boolean isClear()
-    {
-
+        return this.location.getWorld() == location.getWorld() && this.location.distanceSquared(location) <= size * size;
     }
 }

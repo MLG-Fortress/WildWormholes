@@ -2,14 +2,12 @@ package to.us.mlgfort.wormholes;
 
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.block.Block;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.ChunkLoadEvent;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -19,21 +17,20 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class WormholeSpawner implements Listener
 {
-    Wormholes instance;
     List<World> worlds = new ArrayList<>(4);
     Thera thera;
 
-    public WormholeSpawner(Wormholes instance, Thera thera)
+    public WormholeSpawner(JavaPlugin plugin, Thera thera)
     {
-        this.instance = instance;
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
         this.thera = thera;
 
         //le custom code
         //worlds wormholes should spawn in
-        worlds.add(instance.getServer().getWorld("world"));
-        worlds.add(instance.getServer().getWorld("world_nether"));
-        worlds.add(instance.getServer().getWorld("world_the_end"));
-        worlds.add(instance.getServer().getWorld("cityworld"));
+        worlds.add(plugin.getServer().getWorld("world"));
+        worlds.add(plugin.getServer().getWorld("world_nether"));
+        worlds.add(plugin.getServer().getWorld("world_the_end"));
+        worlds.add(plugin.getServer().getWorld("cityworld"));
         //worlds.add(instance.getServer().getWorld("cityworld_nether"));
     }
 

@@ -1,0 +1,4 @@
+name: Wormholes
+author: RoboMWM
+version: ${project.version}
+main: to.us.mlgfort.wormholes.wormholes
