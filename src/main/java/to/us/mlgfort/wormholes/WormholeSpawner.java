@@ -2,6 +2,7 @@ package to.us.mlgfort.wormholes;
 
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -34,6 +35,7 @@ public class WormholeSpawner implements Listener
         //worlds.add(instance.getServer().getWorld("cityworld_nether"));
     }
 
+    @EventHandler
     public void onChunkLoad(ChunkLoadEvent event)
     {
         //Build any wormholes that should be here or something
