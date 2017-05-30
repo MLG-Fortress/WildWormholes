@@ -41,7 +41,7 @@ public class WormholeSpawner implements Listener
 
         //Spawn a new wormhole?
         //TODO: change
-        if (r4nd0m(0, 20) < 18)
+        if (r4nd0m(0, 5) > 4)
             return;
 
         Location location = event.getChunk().getBlock(ThreadLocalRandom.current().nextInt(16), 255, ThreadLocalRandom.current().nextInt(16)).getLocation();
