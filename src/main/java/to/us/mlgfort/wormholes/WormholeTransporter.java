@@ -1,6 +1,7 @@
 package to.us.mlgfort.wormholes;
 
 import org.bukkit.Location;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPortalEnterEvent;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -22,6 +23,7 @@ public class WormholeTransporter implements Listener
         this.thera = thera;
     }
 
+    @EventHandler(ignoreCancelled = true)
     void onEnterWormhole(EntityPortalEnterEvent event)
     {
         Wormhole wormhole = thera.getWormhole(event.getLocation());
