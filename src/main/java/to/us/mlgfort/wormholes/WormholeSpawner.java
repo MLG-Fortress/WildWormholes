@@ -51,6 +51,8 @@ public class WormholeSpawner implements Listener
         //TODO: nether roof support (or just not even worry about getting a clear block. Might just do that instead.)
 
         thera.addWormhole(86400, 3000, location, randomLocation(location));
+        System.out.println("Spawned a wormhole at " + location.toString());
+        thera.buildWormholes(event.getChunk());
     }
 
     private Location randomLocation(Location initialLocation)
