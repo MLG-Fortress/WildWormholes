@@ -80,7 +80,7 @@ public class WormholeSpawner implements Listener
         Location location = new Location(world, randomX, r4nd0m(10, 200), randomZ);
 
         //Make sure it's not right next to the initial location (rare)
-        if (location.getWorld() != initialLocation.getWorld() && location.distanceSquared(initialLocation) > 500)
+        if (location.getWorld() != initialLocation.getWorld() || location.distanceSquared(initialLocation) > 500)
             return location;
         //otherwise try again
         return randomLocation(initialLocation);
