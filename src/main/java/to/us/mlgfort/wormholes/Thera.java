@@ -60,6 +60,23 @@ public class Thera
         return null;
     }
 
+    /**
+     * For now, only returns a single Wormhole object, since there should only be one wormhole in a chunk
+     * @param chunk
+     * @return
+     */
+    public Wormhole getWormhole(Chunk chunk)
+    {
+        for (Wormhole wormhole : wormholes)
+        {
+            if (wormhole.getLocation().getChunk() == chunk)
+            {
+                return wormhole;
+            }
+        }
+        return null;
+    }
+
     public void buildWormholes(Chunk chunk)
     {
         for (Wormhole wormhole : wormholes)

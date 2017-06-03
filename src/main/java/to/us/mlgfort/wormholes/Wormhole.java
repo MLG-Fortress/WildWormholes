@@ -80,6 +80,9 @@ public class Wormhole
 
     public void build()
     {
+        //Don't bother building if the chunk isn't loaded
+        if (!location.getChunk().isLoaded())
+            return;
         int x = location.getBlockX();
         int y = location.getBlockY();
         y++;

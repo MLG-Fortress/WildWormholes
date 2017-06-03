@@ -46,6 +46,10 @@ public class WormholeSpawner implements Listener
         if (r4nd0m(0, 5) > 4)
             return;
 
+        //Only max of one wormhole in a chunk
+        if (thera.getWormhole(event.getChunk()) != null)
+            return;
+
         Location location = event.getChunk().getBlock(ThreadLocalRandom.current().nextInt(16), 64, ThreadLocalRandom.current().nextInt(16)).getLocation();
 
         location.setY(location.getWorld().getHighestBlockYAt(location));
