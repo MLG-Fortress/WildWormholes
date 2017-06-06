@@ -57,8 +57,8 @@ public class WormholeSpawner implements Listener
             return;
 
         //Only spawn if a player is nearby
-        if (!playerNearby(event.getChunk().getBlock(8, 64, 8).getLocation(), 20000))
-            return;
+        //if (!playerNearby(event.getChunk().getBlock(8, 64, 8).getLocation(), 20000))
+         //   return;
 
         //Only max of one wormhole in a chunk
         if (thera.getWormhole(event.getChunk()) != null)
@@ -110,7 +110,6 @@ public class WormholeSpawner implements Listener
 
     private boolean playerNearby(Location location, int distanceSquared)
     {
-        //Only spawn if a player is nearby
         for (Player player : location.getWorld().getPlayers())
         {
             if (player.getLocation().distanceSquared(location) < distanceSquared) //Just over 128 blocks
