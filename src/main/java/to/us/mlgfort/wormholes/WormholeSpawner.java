@@ -2,6 +2,7 @@ package to.us.mlgfort.wormholes;
 
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.ChunkLoadEvent;
@@ -43,12 +44,20 @@ public class WormholeSpawner implements Listener
         if (--lol < 0)
             return;
 
+        //Ignore if not a valid world to spawn wormholes in
+        if (!worlds.contains(event.getWorld()))
+            return;
+
         //Build any wormholes that should be here or something
         thera.buildWormholes(event.getChunk());
 
         //Spawn a new wormhole?
         //TODO: change
         if (r4nd0m(0, 5) > 4)
+            return;
+
+        //Only spawn if a player is nearby
+        if (!playerNearby(event.getChunk().getBlock(8, 64, 8).getLocation(), 20000))
             return;
 
         //Only max of one wormhole in a chunk
@@ -97,6 +106,20 @@ public class WormholeSpawner implements Listener
 
     public int r4nd0m(int min, int max) {
         return ThreadLocalRandom.current().nextInt(min, max + 1);
+    }
+
+    private boolean playerNearby(Location location, int distanceSquared)
+    {
+        //Only spawn if a player is nearby
+        for (Player player : location.getWorld().getPlayers())
+        {
+            if (player.getLocation().distanceSquared(location) < distanceSquared) //Just over 128 blocks
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 
