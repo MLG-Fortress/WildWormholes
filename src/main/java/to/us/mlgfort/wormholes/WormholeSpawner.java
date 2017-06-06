@@ -20,6 +20,7 @@ public class WormholeSpawner implements Listener
 {
     List<World> worlds = new ArrayList<>(4);
     Thera thera;
+    int lol = 100;
 
     public WormholeSpawner(JavaPlugin plugin, Thera thera)
     {
@@ -38,6 +39,10 @@ public class WormholeSpawner implements Listener
     @EventHandler
     public void onChunkLoad(ChunkLoadEvent event)
     {
+        //Try to actually stop these endless loops lol
+        if (--lol < 0)
+            return;
+
         //Build any wormholes that should be here or something
         thera.buildWormholes(event.getChunk());
 
