@@ -44,6 +44,7 @@ public class Thera
             {
                 wormholes.remove(wormhole.getOtherSide());
                 wormholes.remove(wormhole);
+                //TODO: destroy wormhole
             }
         }
     }
@@ -79,6 +80,7 @@ public class Thera
 
     public void buildWormholes(Chunk chunk)
     {
+        //TODO: fix CME?
         for (Wormhole wormhole : wormholes)
         {
             if (wormhole.getLocation().getChunk() == chunk)
