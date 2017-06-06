@@ -41,8 +41,10 @@ public class WormholeSpawner implements Listener
     public void onChunkLoad(ChunkLoadEvent event)
     {
         //Try to actually stop these endless loops lol
-        if (--lol < 0)
+        if (lol < 0)
             return;
+        else
+            lol--;
 
         //Ignore if not a valid world to spawn wormholes in
         if (!worlds.contains(event.getWorld()))
