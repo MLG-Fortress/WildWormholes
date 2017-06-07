@@ -69,7 +69,7 @@ public class WormholeSpawner implements Listener
             public void run()
             {
                 //Only spawn if a player is nearby (otherwise random chunk load events could cause endless wormhole spawning)
-                if (!playerNearby(event.getChunk().getBlock(8, 64, 8).getLocation(), instance.getServer().getViewDistance() * 16 * 16))
+                if (!playerNearby(event.getChunk().getBlock(8, 64, 8).getLocation(), instance.getServer().getViewDistance() * 16 * 2))
                    return;
 
                 //Only max of one wormhole in a chunk
