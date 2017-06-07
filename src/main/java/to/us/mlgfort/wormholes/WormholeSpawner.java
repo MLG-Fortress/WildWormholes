@@ -126,7 +126,7 @@ public class WormholeSpawner implements Listener
     {
         for (Player player : location.getWorld().getPlayers())
         {
-            if (player.getLocation().distanceSquared(location) < (distance * distance))
+            if ((Math.abs(player.getLocation().getBlockX() - location.getBlockX()) <= (distance + 8)) && (Math.abs(player.getLocation().getBlockZ() - location.getBlockZ()) <= (distance + 8))) //ergh
             {
                 return true;
             }
