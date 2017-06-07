@@ -48,6 +48,7 @@ public class Thera
                 wormholes.remove(wormhole.getOtherSide());
                 wormholes.remove(wormhole);
                 //TODO: destroy wormhole
+                return;
             }
         }
     }

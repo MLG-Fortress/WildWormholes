@@ -74,6 +74,9 @@ public class Wormhole
      */
     public boolean tick()
     {
+        if (duration == null)
+            return otherSide.duration < 0;
+
         duration--;
         return duration < 0;
     }
