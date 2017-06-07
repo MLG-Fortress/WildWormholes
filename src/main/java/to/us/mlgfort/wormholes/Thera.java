@@ -16,6 +16,7 @@ import java.util.Set;
 public class Thera
 {
     private Set<Wormhole> wormholes = new HashSet<>();
+    boolean building = false; //Used to prevent CME's cuz rite now we use chunkloadevent to add new wormholes... and building wormholes can cause more chunk load events.
 
     public Thera(JavaPlugin plugin)
     {
@@ -31,6 +32,8 @@ public class Thera
 
     public void addWormhole(int initialDuration, int initialMass, Location initialLocation, Location destinationLocation)
     {
+        if (building)
+            return;
         Wormhole wormhole = new Wormhole(initialDuration, initialMass, initialLocation, destinationLocation);
         wormholes.add(wormhole);
         wormholes.add(wormhole.getOtherSide());
@@ -80,11 +83,16 @@ public class Thera
 
     public void buildWormholes(Chunk chunk)
     {
+        if (building)
+            return;
+
+        building = true;
         //TODO: fix CME?
         for (Wormhole wormhole : wormholes)
         {
             if (wormhole.getLocation().getChunk() == chunk)
                 wormhole.build();
         }
+        building = false;
     }
 }

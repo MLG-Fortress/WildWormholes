@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,12 +20,14 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class WormholeSpawner implements Listener
 {
+    JavaPlugin instance;
     List<World> worlds = new ArrayList<>(4);
     Thera thera;
     int lol = 100;
 
     public WormholeSpawner(JavaPlugin plugin, Thera thera)
     {
+        this.instance = plugin;
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         this.thera = thera;
 
@@ -58,28 +61,37 @@ public class WormholeSpawner implements Listener
         if (r4nd0m(0, 5) > 4)
             return;
 
-        //Only spawn if a player is nearby
-        //if (!playerNearby(event.getChunk().getBlock(8, 64, 8).getLocation(), 20000))
-         //   return;
+        //Don't build immediately
 
-        //Only max of one wormhole in a chunk
-        if (thera.getWormhole(event.getChunk()) != null)
-            return;
+        new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                //Only spawn if a player is nearby (otherwise random chunk load events could cause endless wormhole spawning)
+                if (!playerNearby(event.getChunk().getBlock(8, 64, 8).getLocation(), 2048))
+                   return;
 
-        Location location = event.getChunk().getBlock(ThreadLocalRandom.current().nextInt(16), 64, ThreadLocalRandom.current().nextInt(16)).getLocation();
+                //Only max of one wormhole in a chunk
+                if (thera.getWormhole(event.getChunk()) != null)
+                    return;
 
-        location.setY(location.getWorld().getHighestBlockYAt(location));
+                Location location = event.getChunk().getBlock(ThreadLocalRandom.current().nextInt(16), 64, ThreadLocalRandom.current().nextInt(16)).getLocation();
 
-        //TODO: nether roof support (or just not even worry about getting a clear block. Might just do that instead.)
+                location.setY(location.getWorld().getHighestBlockYAt(location));
 
-        thera.addWormhole(86400, 3000, location, randomLocation(location));
-        System.out.println("Spawned a wormhole at " + location.toString());
-        thera.buildWormholes(event.getChunk());
+                //TODO: nether roof support (or just not even worry about getting a clear block. Might just do that instead.)
+
+                thera.addWormhole(86400, 3000, location, randomLocation(location));
+                System.out.println("Spawned a wormhole at " + location.toString());
+                thera.buildWormholes(event.getChunk());
+            }
+        }.runTaskLater(instance, 4L);
     }
 
     private Location randomLocation(Location initialLocation)
     {
-        World world = worlds.get(r4nd0m(0, worlds.size()));
+        World world = worlds.get(r4nd0m(0, worlds.size() - 1));
         Location borderCenter;
         int borderSize;
         if (world.getWorldBorder() == null || world.getWorldBorder().getCenter() == null) //Apparently this can be null......
@@ -110,11 +122,11 @@ public class WormholeSpawner implements Listener
         return ThreadLocalRandom.current().nextInt(min, max + 1);
     }
 
-    private boolean playerNearby(Location location, int distanceSquared)
+    private boolean playerNearby(Location location, int distance)
     {
         for (Player player : location.getWorld().getPlayers())
         {
-            if (player.getLocation().distanceSquared(location) < distanceSquared) //Just over 128 blocks
+            if (player.getLocation().distanceSquared(location) < (distance * distance))
             {
                 return true;
             }
