@@ -97,12 +97,12 @@ public class WormholeSpawner implements Listener
         if (world.getWorldBorder() == null || world.getWorldBorder().getCenter() == null) //Apparently this can be null......
         {
             borderCenter = new Location(world, 0, 0, 0);
-            borderSize = 14999990;
+            borderSize = 60000000;
         }
         else
         {
             borderCenter = world.getWorldBorder().getCenter();
-            borderSize = (int)world.getWorldBorder().getSize() - 1000; //i.e. world must have a border size far above 1000
+            borderSize = (int)(world.getWorldBorder().getSize() / 2) - 1000; //i.e. world must have a border size far above 1000
         }
 
 
