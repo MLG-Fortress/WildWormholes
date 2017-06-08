@@ -88,12 +88,13 @@ public class Thera
             return;
 
         building = true;
-        //TODO: fix CME?
+
         for (Wormhole wormhole : wormholes)
         {
             if (wormhole.getLocation().getChunk() == chunk)
                 wormhole.build();
         }
+
         building = false;
     }
 }

@@ -86,6 +86,7 @@ public class Wormhole
         //Don't bother building if the chunk isn't loaded
         if (!location.getChunk().isLoaded())
             return;
+
         int x = location.getBlockX();
         int y = location.getBlockY();
         y++;
@@ -113,7 +114,7 @@ public class Wormhole
         //Inner portal blocks
         for (int x1 = x - (size - 1); x1 < x + (size - 1); x1++)
         {
-            for (int z1 = z - size; z1 < z + size; z1++)
+            for (int z1 = z - (size - 1); z1 < z + (size - 1); z1++)
                 world.getBlockAt(x1, location.getBlockY(), z1).setType(Material.ENDER_PORTAL);
         }
     }

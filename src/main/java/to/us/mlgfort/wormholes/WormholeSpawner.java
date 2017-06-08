@@ -53,15 +53,20 @@ public class WormholeSpawner implements Listener
         if (!worlds.contains(event.getWorld()))
             return;
 
-        //Build any wormholes that should be here or something
-        thera.buildWormholes(event.getChunk());
+        //Build any wormholes that should be here
+        new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                thera.buildWormholes(event.getChunk());
+            }
+        }.runTaskLater(instance, 10L);
 
         //Spawn a new wormhole?
-        //TODO: change
+        //TODO: change, and potentially unlink from ChunkLoadEvent(?)
         if (r4nd0m(0, 5) > 4)
             return;
-
-        //Don't build immediately
 
         new BukkitRunnable()
         {
@@ -84,9 +89,8 @@ public class WormholeSpawner implements Listener
 
                 thera.addWormhole(86400, 3000, location, randomLocation(location));
                 System.out.println("Spawned a wormhole at " + location.toString());
-                thera.buildWormholes(event.getChunk());
             }
-        }.runTaskLater(instance, 4L);
+        }.runTaskLater(instance, 2L);
     }
 
     private Location randomLocation(Location initialLocation)
