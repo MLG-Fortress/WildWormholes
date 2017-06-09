@@ -1,5 +1,6 @@
 package to.us.mlgfort.wormholes;
 
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -38,17 +39,48 @@ public class WormholeSpawner implements Listener
         worlds.add(plugin.getServer().getWorld("world_the_end"));
         worlds.add(plugin.getServer().getWorld("cityworld"));
         //worlds.add(instance.getServer().getWorld("cityworld_nether"));
+
+        //Spawn wormholes at random time intervals or something
+        new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                if (r4nd0m(0, 5) > 4)
+                    return;
+
+                Chunk[] chunks = worlds.get(r4nd0m(0, worlds.size() - 1)).getLoadedChunks();
+                Chunk chunk = chunks[r4nd0m(0, chunks.length - 1)];
+
+                //TODO: temporarily disabled to allow testing
+                //if (playerNearby(chunk.getBlock(8, 64, 8).getLocation(), instance.getServer().getViewDistance() * 16 / 2))
+                //    return;
+
+                //Only max of one wormhole in a chunk
+                if (thera.getWormhole(chunk) != null)
+                    return;
+
+                Location location = chunk.getBlock(ThreadLocalRandom.current().nextInt(16), 64, ThreadLocalRandom.current().nextInt(16)).getLocation();
+
+                location.setY(location.getWorld().getHighestBlockYAt(location));
+
+                //TODO: nether roof support (or just not even worry about getting a clear block. Might just do that instead.)
+
+                Wormhole wormhole = thera.addWormhole(86400, 3000, location, randomLocation(location));
+
+                //Build newly-spawned wormholes
+                thera.buildWormholes(wormhole.getLocation().getChunk());
+                thera.buildWormholes(wormhole.getOtherSide().getLocation().getChunk());
+
+                //TODO: debug
+                System.out.println("Spawned a wormhole at " + location.toString());
+            }
+        }.runTaskTimer(instance, 4000L, 6000L);
     }
 
     @EventHandler
     public void onChunkLoad(ChunkLoadEvent event)
     {
-        //Try to actually stop these endless loops lol
-        if (lol < 0)
-            return;
-        else
-            lol--;
-
         //Ignore if not a valid world to spawn wormholes in
         if (!worlds.contains(event.getWorld()))
             return;
@@ -62,35 +94,6 @@ public class WormholeSpawner implements Listener
                 thera.buildWormholes(event.getChunk());
             }
         }.runTaskLater(instance, 10L);
-
-        //Spawn a new wormhole?
-        //TODO: change, and potentially unlink from ChunkLoadEvent(?)
-        if (r4nd0m(0, 5) > 4)
-            return;
-
-        new BukkitRunnable()
-        {
-            @Override
-            public void run()
-            {
-                //Only spawn if a player is nearby (otherwise random chunk load events could cause endless wormhole spawning)
-                if (!playerNearby(event.getChunk().getBlock(8, 64, 8).getLocation(), instance.getServer().getViewDistance() * 16 * 2))
-                   return;
-
-                //Only max of one wormhole in a chunk
-                if (thera.getWormhole(event.getChunk()) != null)
-                    return;
-
-                Location location = event.getChunk().getBlock(ThreadLocalRandom.current().nextInt(16), 64, ThreadLocalRandom.current().nextInt(16)).getLocation();
-
-                location.setY(location.getWorld().getHighestBlockYAt(location));
-
-                //TODO: nether roof support (or just not even worry about getting a clear block. Might just do that instead.)
-
-                thera.addWormhole(86400, 3000, location, randomLocation(location));
-                System.out.println("Spawned a wormhole at " + location.toString());
-            }
-        }.runTaskLater(instance, 2L);
     }
 
     private Location randomLocation(Location initialLocation)

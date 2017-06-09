@@ -30,13 +30,14 @@ public class Thera
         }.runTaskTimer(plugin, 20L, 20L);
     }
 
-    public void addWormhole(int initialDuration, int initialMass, Location initialLocation, Location destinationLocation)
+    public Wormhole addWormhole(int initialDuration, int initialMass, Location initialLocation, Location destinationLocation)
     {
         if (building)
-            return;
+            return null;
         Wormhole wormhole = new Wormhole(initialDuration, initialMass, initialLocation, destinationLocation);
         wormholes.add(wormhole);
         wormholes.add(wormhole.getOtherSide());
+        return wormhole;
     }
 
     private void wormholeMaintenanceTask()
