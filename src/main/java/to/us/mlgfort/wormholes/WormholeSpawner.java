@@ -50,6 +50,7 @@ public class WormholeSpawner implements Listener
                     return;
 
                 Chunk[] chunks = worlds.get(r4nd0m(0, worlds.size() - 1)).getLoadedChunks();
+                if (chunks.length <= 0) return;
                 Chunk chunk = chunks[r4nd0m(0, chunks.length - 1)];
 
                 //TODO: temporarily disabled to allow testing
@@ -60,7 +61,7 @@ public class WormholeSpawner implements Listener
                 if (thera.getWormhole(chunk) != null)
                     return;
 
-                Location location = chunk.getBlock(ThreadLocalRandom.current().nextInt(16), 64, ThreadLocalRandom.current().nextInt(16)).getLocation();
+                Location location = chunk.getBlock(r4nd0m(0, 15), 64, r4nd0m(0, 15)).getLocation();
 
                 location.setY(location.getWorld().getHighestBlockYAt(location));
 
@@ -73,7 +74,7 @@ public class WormholeSpawner implements Listener
                 thera.buildWormholes(wormhole.getOtherSide().getLocation().getChunk());
 
                 //TODO: debug
-                System.out.println("Spawned a wormhole at " + location.toString());
+                System.out.println("Spawned a wormhole at " + location.toString() + "\nWith the other side at " + wormhole.getOtherSide().getLocation().toString());
             }
         }.runTaskTimer(instance, 4000L, 6000L);
     }
