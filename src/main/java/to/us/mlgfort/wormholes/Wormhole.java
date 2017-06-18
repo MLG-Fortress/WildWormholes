@@ -121,11 +121,26 @@ public class Wormhole
 
     public void destroy()
     {
+        int x = location.getBlockX();
+        int y = location.getBlockY();
+        y++;
+        int z = location.getBlockZ();
+        World world = location.getWorld();
 
+        for (int x1 = x - size; x1 < x + size; x1++)
+        {
+            for (int z1 = z - size; z1 < z + size; z1++)
+                world.getBlockAt(x1, location.getBlockY(), z1).setType(Material.AIR);
+        }
     }
 
     public boolean isCloseEnough(Location location)
     {
         return this.location.getWorld() == location.getWorld() && this.location.distanceSquared(location) <= size * size;
+    }
+
+    public void playSound(String sound, float volume, float pitch)
+    {
+        location.getWorld().playSound(location, sound, volume, pitch);
     }
 }

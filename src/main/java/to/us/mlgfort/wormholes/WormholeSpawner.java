@@ -49,13 +49,17 @@ public class WormholeSpawner implements Listener
                 if (r4nd0m(0, 5) > 4)
                     return;
 
+                //If nobody's on, there's not many chunks to decide where to spawn.
+                if (instance.getServer().getOnlinePlayers().size() < 1)
+                    return;
+
                 Chunk[] chunks = worlds.get(r4nd0m(0, worlds.size() - 1)).getLoadedChunks();
                 if (chunks.length <= 0) return;
                 Chunk chunk = chunks[r4nd0m(0, chunks.length - 1)];
 
-                //TODO: temporarily disabled to allow testing
-                //if (playerNearby(chunk.getBlock(8, 64, 8).getLocation(), instance.getServer().getViewDistance() * 16 / 2))
-                //    return;
+                //Don't spawn wormholes on top of players
+                if (playerNearby(chunk.getBlock(8, 64, 8).getLocation(), instance.getServer().getViewDistance() * 16 / 4))
+                    return;
 
                 //Only max of one wormhole in a chunk
                 if (thera.getWormhole(chunk) != null)
@@ -76,7 +80,7 @@ public class WormholeSpawner implements Listener
                 //TODO: debug
                 System.out.println("Spawned a wormhole at " + location.toString() + "\nWith the other side at " + wormhole.getOtherSide().getLocation().toString());
             }
-        }.runTaskTimer(instance, 4000L, 6000L);
+        }.runTaskTimer(instance, 4000L, 12000L);
     }
 
     @EventHandler

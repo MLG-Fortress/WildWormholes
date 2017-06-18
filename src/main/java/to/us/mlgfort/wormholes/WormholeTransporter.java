@@ -31,6 +31,7 @@ public class WormholeTransporter implements Listener
         if (wormhole == null)
             return;
 
+        //Currently teleports player to a random spot on the perimeter of the wormhole...
         Location location = wormhole.getOtherSide().getLocation();
 
         int randomX = 3;

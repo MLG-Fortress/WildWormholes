@@ -9,10 +9,16 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class Wormholes extends JavaPlugin
 {
+    Thera thera;
     public void onEnable()
     {
-        Thera thera = new Thera(this);
+        thera = new Thera(this);
         new WormholeSpawner(this, thera);
         new WormholeTransporter(this, thera);
+    }
+
+    public void onDisable()
+    {
+        getLogger().info("Destroying " + thera.destroyAllWormholes() + " wormholes.");
     }
 }

@@ -46,9 +46,13 @@ public class Thera
         {
             if (wormhole.tick())
             {
+                wormhole.destroy();
+                wormhole.getOtherSide().destroy();
+
+                //TODO: sounds of destruction
+
                 wormholes.remove(wormhole.getOtherSide());
                 wormholes.remove(wormhole);
-                //TODO: destroy wormhole
                 return;
             }
         }
@@ -98,4 +102,13 @@ public class Thera
 
         building = false;
     }
+
+    public int destroyAllWormholes()
+    {
+        int size = wormholes.size();
+        for (Wormhole wormhole : wormholes)
+            wormhole.destroy();
+        return size;
+    }
+
 }
