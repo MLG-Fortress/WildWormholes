@@ -3,6 +3,7 @@ package to.us.mlgfort.wormholes;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -93,10 +94,10 @@ public class Wormhole
         int z = location.getBlockZ();
         World world = location.getWorld();
 
-        location.getBlock().setType(Material.END_GATEWAY);
-        world.getBlockAt(x, location.getBlockY() - 1, z).setType(Material.AIR);
-        world.getBlockAt(x, location.getBlockY() - 2, z).setType(Material.AIR);
-        world.getBlockAt(x, location.getBlockY() - 3, z).setType(Material.BEDROCK);
+        setBlock(location.getBlock(), Material.END_GATEWAY);
+        setBlock(world.getBlockAt(x, location.getBlockY() - 1, z), Material.AIR);
+        setBlock(world.getBlockAt(x, location.getBlockY() - 2, z), Material.AIR);
+        setBlock(world.getBlockAt(x, location.getBlockY() - 3, z), Material.BEDROCK);
 
         //The following builds a 4x4 portal, perimeter made of bedrock, inside made of end portal
         //This is also provided that int size = 3;
@@ -126,6 +127,12 @@ public class Wormhole
                 world.getBlockAt(x1, location.getBlockY(), z1).setType(Material.ENDER_PORTAL);
         }
         */
+    }
+
+    public void setBlock(Block block, Material material)
+    {
+        if (block.getType() != material)
+            block.setType(material);
     }
 
     public void destroy()
