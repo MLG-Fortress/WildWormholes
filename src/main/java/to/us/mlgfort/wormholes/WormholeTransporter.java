@@ -39,8 +39,9 @@ public class WormholeTransporter implements Listener
         //Ensure the other side isn't obstructed
         wormhole.getOtherSide().build();
 
-        //event.getPlayer().teleport(wormhole.getOtherSide().getLocation().add(0.5, -2, 0.5));
-        //event.setCancelled(true);
+        event.getPlayer().teleport(wormhole.getOtherSide().getLocation().add(0.5, -2, 0.5));
+
+        event.setCancelled(true);
 
         //TODO: fire WormholeTeleportEvent
     }

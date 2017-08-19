@@ -97,7 +97,8 @@ public class Wormhole
 
         setBlock(location.getBlock(), Material.END_GATEWAY);
         EndGateway endGateway = (EndGateway)location.getBlock().getState();
-        endGateway.setExitLocation(otherSide.getLocation().add(0.5, -2, 0.5));
+        endGateway.setExitLocation(location);
+        endGateway.setExactTeleport(true);
         endGateway.update();
         setBlock(world.getBlockAt(x, location.getBlockY() - 1, z), Material.AIR);
         setBlock(world.getBlockAt(x, location.getBlockY() - 2, z), Material.AIR);
