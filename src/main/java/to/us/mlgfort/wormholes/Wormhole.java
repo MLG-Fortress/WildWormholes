@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.EndGateway;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -95,6 +96,9 @@ public class Wormhole
         World world = location.getWorld();
 
         setBlock(location.getBlock(), Material.END_GATEWAY);
+        EndGateway endGateway = (EndGateway)location.getBlock().getState();
+        endGateway.setExitLocation(otherSide.getLocation().add(0.5, -2, 0.5));
+        endGateway.update();
         setBlock(world.getBlockAt(x, location.getBlockY() - 1, z), Material.AIR);
         setBlock(world.getBlockAt(x, location.getBlockY() - 2, z), Material.AIR);
         setBlock(world.getBlockAt(x, location.getBlockY() - 3, z), Material.BEDROCK);
