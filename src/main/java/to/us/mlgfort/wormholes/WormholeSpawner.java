@@ -152,7 +152,7 @@ public class WormholeSpawner implements Listener
         if (isVanillaNether(chunk.getWorld()))
             maxY = 126;
 
-        Location location = new Location(chunk.getWorld(), r4nd0m(0, 15), r4nd0m(minY, maxY), r4nd0m(0,15));
+        Location location = chunk.getBlock(r4nd0m(0, 15), r4nd0m(minY, maxY), r4nd0m(0,15)).getLocation();
 
         if (!isOkayToDestroy(location))
             return randomLocation(chunk, --attempts);
