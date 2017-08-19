@@ -15,7 +15,7 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class Wormhole
 {
-    private final int size = 3;
+    //private final int size = 3;
     private Wormhole otherSide;
     private Location location;
 
@@ -89,10 +89,18 @@ public class Wormhole
 
         int x = location.getBlockX();
         int y = location.getBlockY();
-        y++;
+        //y++;
         int z = location.getBlockZ();
         World world = location.getWorld();
 
+        location.getBlock().setType(Material.END_GATEWAY);
+        world.getBlockAt(x, location.getBlockY() - 1, z).setType(Material.AIR);
+        world.getBlockAt(x, location.getBlockY() - 2, z).setType(Material.AIR);
+        world.getBlockAt(x, location.getBlockY() - 3, z).setType(Material.BEDROCK);
+
+        //The following builds a 4x4 portal, perimeter made of bedrock, inside made of end portal
+        //This is also provided that int size = 3;
+        /*
         //Outer bedrock perimeter
         //Lazy way = set all of it to bedrock
         for (int x1 = x - size; x1 < x + size; x1++)
@@ -117,26 +125,35 @@ public class Wormhole
             for (int z1 = z - (size - 1); z1 < z + (size - 1); z1++)
                 world.getBlockAt(x1, location.getBlockY(), z1).setType(Material.ENDER_PORTAL);
         }
+        */
     }
 
     public void destroy()
     {
         int x = location.getBlockX();
         int y = location.getBlockY();
-        y++;
+        //y++;
         int z = location.getBlockZ();
         World world = location.getWorld();
 
+        location.getBlock().setType(Material.AIR);
+        world.getBlockAt(x, location.getBlockY() - 3, z).setType(Material.AIR);
+
+        /*
         for (int x1 = x - size; x1 < x + size; x1++)
         {
             for (int z1 = z - size; z1 < z + size; z1++)
                 world.getBlockAt(x1, location.getBlockY(), z1).setType(Material.AIR);
         }
+        */
     }
 
     public boolean isCloseEnough(Location location)
     {
-        return this.location.getWorld() == location.getWorld() && this.location.distanceSquared(location) <= size * size;
+        //return this.location.getWorld() == location.getWorld() && this.location.distanceSquared(location) <= size * size;
+
+        //Since the actual portal block is a single block, a distance of 2 should be sufficient to lazily determine if an entity is within it.
+        return this.location.getWorld() == location.getWorld() && this.location.distanceSquared(location) <= 4;
     }
 
     public void playSound(String sound, float volume, float pitch)

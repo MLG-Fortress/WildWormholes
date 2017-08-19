@@ -31,6 +31,14 @@ public class WormholeTransporter implements Listener
         if (wormhole == null)
             return;
 
+        //Ensure the other side isn't obstructed
+        wormhole.getOtherSide().build();
+
+        event.getEntity().teleport(wormhole.getOtherSide().getLocation().add(0.5, -2, 0.5));
+
+        //TODO: fire WormholeTeleportEvent
+
+        /*
         //Currently teleports player to a random spot on the perimeter of the wormhole...
         Location location = wormhole.getOtherSide().getLocation();
 
@@ -50,9 +58,6 @@ public class WormholeTransporter implements Listener
 
         location.add(randomX, 1, randomZ);
         event.getEntity().teleport(location);
-    }
-
-    public int r4nd0m(int min, int max) {
-        return ThreadLocalRandom.current().nextInt(min, max + 1);
+        */
     }
 }
