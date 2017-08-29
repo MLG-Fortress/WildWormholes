@@ -1,5 +1,6 @@
 package to.us.mlgfort.wormholes;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -43,7 +44,24 @@ public class WormholeTransporter implements Listener
 
         event.setCancelled(true);
 
+        String message;
+
         //TODO: fire WormholeTeleportEvent
+        switch (wormhole.getOtherSide().getLocation().getWorld().getName())
+        {
+            case "world":
+            case "cityworld":
+                message = ChatColor.DARK_AQUA + "You are sucked through the wormhole into a familiar world.";
+                break;
+            case "world_nether":
+            case "cityworld_nether":
+                message = ChatColor.DARK_RED + "You are sucked through the wormhole into a not-so-friendly-looking world.";
+                break;
+            default:
+                message = ChatColor.GRAY + "You are sucked through the wormhole into an unknown world.";
+        }
+
+        event.getPlayer().sendMessage(message);
     }
 
 

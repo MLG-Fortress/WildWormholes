@@ -58,8 +58,8 @@ public class WormholeSpawner implements Listener
                 if (chunks.length <= 0) return;
                 Chunk chunk = chunks[r4nd0m(0, chunks.length - 1)];
 
-                //Ensure a player is somewhat nearby (within just beyond the view distance)
-                if (!playerNearby(chunk.getBlock(8, 64, 8).getLocation(), instance.getServer().getViewDistance() * 20))
+                //Ensure a player is somewhat nearby (within view distance)
+                if (!playerNearby(chunk.getBlock(8, 64, 8).getLocation(), instance.getServer().getViewDistance() * 16))
                     return;
 
                 //Don't spawn wormholes on top of players
@@ -84,7 +84,7 @@ public class WormholeSpawner implements Listener
                 //TODO: debug
                 plugin.getLogger().info("Spawned a wormhole at " + location.toString() + "\nWith the other side at " + otherSide.toString());
             }
-        }.runTaskTimer(plugin, 1200L, 1200L);
+        }.runTaskTimer(plugin, 1200L, 300L);
     }
 
     @EventHandler
