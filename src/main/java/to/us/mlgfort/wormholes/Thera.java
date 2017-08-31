@@ -89,7 +89,7 @@ public class Thera
 
     public void buildWormholes(Chunk chunk)
     {
-        if (building)
+        if (building) //poor man's "thread lock"
             return;
 
         building = true;

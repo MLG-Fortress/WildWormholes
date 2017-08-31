@@ -40,6 +40,8 @@ public class WormholeSpawner implements Listener
         worlds.add(plugin.getServer().getWorld("world_the_end"));
         worlds.add(plugin.getServer().getWorld("cityworld"));
         worlds.add(plugin.getServer().getWorld("cityworld_nether"));
+        worlds.add(plugin.getServer().getWorld("wellworld"));
+        worlds.add(plugin.getServer().getWorld("maxiworld"));
 
         //Spawn wormholes at random time intervals or something
         new BukkitRunnable()
