@@ -134,9 +134,9 @@ public class WormholeSpawner implements Listener
         int randomX = r4nd0m(borderCenter.getBlockX() - borderSize, borderCenter.getBlockX() + borderSize);
         int randomZ = r4nd0m(borderCenter.getBlockZ() - borderSize, borderCenter.getBlockZ() + borderSize);
 
-        Location location = new Location(world, randomX, r4nd0m(10, 200), randomZ);
+        Location location = new Location(world, randomX, r4nd0m(10, 240), randomZ);
 
-        //Make sure it's not right next to the initial location (rare) and that it's ok to destroy blocks here
+        //Make sure it's not right next to the initial location (rare) and if it's ok to destroy blocks here
         if ((location.getWorld() == initialLocation.getWorld() && location.distanceSquared(initialLocation) < 500)
                 || !isOkayToDestroy(location))
             return randomLocation(initialLocation, --attempts); //otherwise try again
