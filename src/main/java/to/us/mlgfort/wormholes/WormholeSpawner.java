@@ -128,7 +128,7 @@ public class WormholeSpawner implements Listener
         else
         {
             borderCenter = world.getWorldBorder().getCenter();
-            borderSize = (int)(world.getWorldBorder().getSize()) - 1000; //i.e. world must have a border size above 1000
+            borderSize = (int)(world.getWorldBorder().getSize() / 2) - 1000; //i.e. world must have a border radius above 1000
         }
 
         int randomX = r4nd0m(borderCenter.getBlockX() - borderSize, borderCenter.getBlockX() + borderSize);
