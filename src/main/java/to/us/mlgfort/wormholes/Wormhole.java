@@ -72,7 +72,7 @@ public class Wormhole
 
     /**
      * Decreases duration of wormhole
-     * @return if wormhole should've expired
+     * @return if wormhole should've expired due to duration or exceeding mass limit
      */
     public boolean tick()
     {
@@ -80,14 +80,14 @@ public class Wormhole
             return otherSide.duration < 0;
 
         duration--;
-        return duration < 0;
+        return duration < 0 || mass <= 0;
     }
 
     public void build()
     {
         //Don't bother building if the chunk isn't loaded
-        if (!location.getChunk().isLoaded())
-            return;
+        //if (!location.getChunk().isLoaded())
+        //    return;
 
         int x = location.getBlockX();
         int y = location.getBlockY();

@@ -128,7 +128,7 @@ public class WormholeSpawner implements Listener
         else
         {
             borderCenter = world.getWorldBorder().getCenter();
-            borderSize = (int)(world.getWorldBorder().getSize() / 2) - 10000; //i.e. world must have a border size far above 10000
+            borderSize = (int)(world.getWorldBorder().getSize()) - 1000; //i.e. world must have a border size above 1000
         }
 
         int randomX = r4nd0m(borderCenter.getBlockX() - borderSize, borderCenter.getBlockX() + borderSize);
@@ -187,7 +187,7 @@ public class WormholeSpawner implements Listener
 
         if (world.getLoadedChunks().length == 0)
             world.loadChunk(0, 0);
-        return world.getLoadedChunks()[0].getBlock(0, 128, 0).getType() == Material.BEDROCK;
+        return world.getLoadedChunks()[0].getBlock(0, 127, 0).getType() == Material.BEDROCK;
     }
 
     //Entirely reliant on the wormhole dimensions
