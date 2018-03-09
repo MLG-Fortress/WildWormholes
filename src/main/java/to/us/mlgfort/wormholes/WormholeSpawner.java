@@ -72,8 +72,8 @@ public class WormholeSpawner implements Listener
                 if (thera.getWormhole(chunk) != null)
                     return;
 
-                Location location = randomLocation(chunk, 4);
-                Location otherSide = randomLocation(location, 4);
+                Location location = randomLocation(chunk, 2);
+                Location otherSide = randomLocation(location, 2);
                 if (location == null || otherSide == null)
                     return;
 
@@ -86,7 +86,7 @@ public class WormholeSpawner implements Listener
                 //TODO: debug
                 plugin.getLogger().info("Spawned a wormhole at " + location.toString() + "\nWith the other side at " + otherSide.toString());
             }
-        }.runTaskTimer(plugin, 1200L, 300L);
+        }.runTaskTimer(plugin, 1200L, 1200L);
     }
 
     @EventHandler
