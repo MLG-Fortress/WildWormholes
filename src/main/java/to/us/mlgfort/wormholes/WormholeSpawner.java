@@ -109,7 +109,7 @@ public class WormholeSpawner implements Listener
 
     private Location randomLocation(Location initialLocation, int attempts)
     {
-        if (attempts < 0)
+        if (initialLocation == null || attempts < 0)
             return null;
 
         int minY = 10;
