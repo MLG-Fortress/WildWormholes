@@ -2,10 +2,12 @@ package to.us.mlgfort.wormholes;
 
 import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -16,7 +18,7 @@ import java.util.Set;
 public class Thera
 {
     private Set<Wormhole> wormholes = new HashSet<>();
-    boolean building = false; //Used to prevent CME's cuz rite now we use chunkloadevent to add new wormholes... and building wormholes can cause more chunk load events.
+    private boolean building = false; //Used to prevent CME's cuz rite now we use chunkloadevent to add new wormholes... and building wormholes can cause more chunk load events.
 
     public Thera(JavaPlugin plugin)
     {
@@ -71,7 +73,7 @@ public class Thera
     }
 
     /**
-     * For now, only returns a single Wormhole object, since there should only be one wormhole in a chunk
+     * For now, only returns a single Wormhole object, since there should only be one wormhole per chunk
      * @param chunk
      * @return
      */
@@ -79,7 +81,7 @@ public class Thera
     {
         for (Wormhole wormhole : wormholes)
         {
-            if (wormhole.getLocation().getChunk() == chunk)
+            if (Chunk.getChunkKey(wormhole.getLocation()) == Chunk.getChunkKey(chunk.getX(), chunk.getZ()))
             {
                 return wormhole;
             }
@@ -94,11 +96,9 @@ public class Thera
 
         building = true;
 
-        for (Wormhole wormhole : wormholes)
-        {
-            if (wormhole.getLocation().getChunk() == chunk)
-                wormhole.build();
-        }
+        Wormhole wormhole = getWormhole(chunk);
+        if (wormhole != null)
+            wormhole.build(false);
 
         building = false;
     }
@@ -108,6 +108,28 @@ public class Thera
         int size = wormholes.size();
         for (Wormhole wormhole : wormholes)
             wormhole.destroy();
+        return size;
+    }
+
+    public int destroyAllWormholes(World world)
+    {
+        int size = 0;
+        Set<Wormhole> destroyedWormholes = new HashSet<>();
+        for (Wormhole wormhole : wormholes)
+        {
+            if (wormhole.getLocation().getWorld().equals(world))
+            {
+                wormhole.destroy();
+                destroyedWormholes.add(wormhole);
+
+                wormhole.getOtherSide().destroy();
+                destroyedWormholes.add(wormhole.getOtherSide());
+
+                size += 2;
+            }
+        }
+
+        wormholes.removeAll(destroyedWormholes);
         return size;
     }
 

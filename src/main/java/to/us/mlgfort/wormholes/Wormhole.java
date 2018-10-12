@@ -83,11 +83,11 @@ public class Wormhole
         return duration < 0 || mass <= 0;
     }
 
-    public void build()
+    public void build(boolean force)
     {
-        //Don't bother building if the chunk isn't loaded
-        //if (!location.getChunk().isLoaded())
-        //    return;
+        //Don't bother building if the chunk isn't loaded and nobody's teleporting here
+        if (!force && !location.getChunk().isLoaded())
+            return;
 
         int x = location.getBlockX();
         int y = location.getBlockY();

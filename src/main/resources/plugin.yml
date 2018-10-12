@@ -3,3 +3,4 @@ author: RoboMWM
 version: ${project.version}
 main: to.us.mlgfort.wormholes.Wormholes
 softdepend: [Multiverse-Core]
+api-version: 1.13
