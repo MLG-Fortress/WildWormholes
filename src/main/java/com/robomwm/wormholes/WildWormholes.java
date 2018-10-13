@@ -11,7 +11,7 @@ import java.util.HashSet;
  *
  * @author RoboMWM
  */
-public class Wormholes extends JavaPlugin
+public class WildWormholes extends JavaPlugin
 {
     private Thera thera;
 
@@ -25,7 +25,7 @@ public class Wormholes extends JavaPlugin
         new WormholeTransporter(this, thera);
         try
         {
-            //new Metrics(this);
+            new Metrics(this);
         }
         catch (Throwable ignored){}
     }

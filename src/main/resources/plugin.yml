@@ -1,6 +1,6 @@
-name: Wormholes
+name: WildWormholes
 author: RoboMWM
 version: ${project.version}
-main: com.robomwm.wormholes.Wormholes
+main: com.robomwm.wormholes.WildWormholes
 softdepend: [Multiverse-Core]
 api-version: 1.13
