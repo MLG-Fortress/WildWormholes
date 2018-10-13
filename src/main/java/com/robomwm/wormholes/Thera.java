@@ -1,4 +1,4 @@
-package to.us.mlgfort.wormholes;
+package com.robomwm.wormholes;
 
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -7,7 +7,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 /**

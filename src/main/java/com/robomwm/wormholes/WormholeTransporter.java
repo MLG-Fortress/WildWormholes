@@ -1,16 +1,10 @@
-package to.us.mlgfort.wormholes;
+package com.robomwm.wormholes;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityPortalEnterEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created on 5/29/2017.
