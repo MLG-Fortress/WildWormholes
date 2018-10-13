@@ -5,6 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.concurrent.Callable;
 
 /**
  * Created on 5/29/2017.
@@ -25,7 +26,14 @@ public class WildWormholes extends JavaPlugin
         new WormholeTransporter(this, thera);
         try
         {
-            new Metrics(this);
+            new Metrics(this).addCustomChart(new Metrics.SimplePie("bukkit_implementation", new Callable<String>()
+            {
+                @Override
+                public String call() throws Exception
+                {
+                    return getServer().getVersion().split("-")[1];
+                }
+            }));
         }
         catch (Throwable ignored){}
     }
