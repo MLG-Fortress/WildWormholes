@@ -43,7 +43,7 @@
                     <createDependencyReducedPom>false</createDependencyReducedPom>
                     <artifactSet>
                         <includes>
-                            <include>org.bstats:bstats-bukkit</include>
+                            <include>org.bstats.bStats-Metrics:bstats-bukkit</include>
                         </includes>
                     </artifactSet>
                     <relocations>
