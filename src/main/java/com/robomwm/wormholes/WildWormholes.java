@@ -20,6 +20,7 @@ public class WildWormholes extends JavaPlugin
     public void onEnable()
     {
         getConfig().addDefault("blacklistedWorlds", Collections.singletonList("spawn"));
+        getConfig().options().copyDefaults(true);
         saveConfig();
         thera = new Thera(this);
         new WormholeSpawner(this, thera, new HashSet<>(getConfig().getStringList("blacklistedWorlds")));
