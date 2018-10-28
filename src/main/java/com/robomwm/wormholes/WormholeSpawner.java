@@ -15,6 +15,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -28,13 +29,17 @@ public class WormholeSpawner implements Listener
     private JavaPlugin instance;
     private Set<String> blacklistedWorlds = new HashSet<>();
     private Thera thera;
+    private int maxRadius;
+    private Map<String, Integer> customMaxRadius;
 
-    public WormholeSpawner(JavaPlugin plugin, Thera thera, Set<String> worldBlacklist)
+    public WormholeSpawner(JavaPlugin plugin, Thera thera, Set<String> worldBlacklist, int maxRadius, Map<String, Integer> customMaxRadius)
     {
         this.instance = plugin;
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         this.thera = thera;
         this.blacklistedWorlds = worldBlacklist;
+        this.maxRadius = maxRadius;
+        this.customMaxRadius = customMaxRadius;
 
         //Spawn wormholes at random time intervals or something
         new BukkitRunnable()
@@ -61,8 +66,10 @@ public class WormholeSpawner implements Listener
                 if (chunks.length <= 0) return;
                 Chunk chunk = chunks[r4nd0m(0, chunks.length - 1)];
 
+                Location chunkLocation = chunk.getBlock(8, 64, 8).getLocation();
+
                 //Ensure a player is somewhat nearby (within view distance)
-                if (!playerNearby(chunk.getBlock(8, 64, 8).getLocation(), instance.getServer().getViewDistance() * 16))
+                if (!playerNearby(chunkLocation, instance.getServer().getViewDistance() * 16))
                     return;
 
                 //Don't spawn wormholes on top of players
@@ -71,6 +78,15 @@ public class WormholeSpawner implements Listener
 
                 //Only max of one wormhole in a chunk
                 if (thera.getWormhole(chunk) != null)
+                    return;
+
+                //Too far away from spawn
+                if (!chunk.getWorld().getWorldBorder().isInside(chunkLocation))
+                    return;
+                int borderSizeRadius = maxRadius;
+                if (customMaxRadius.containsKey(chunkLocation.getWorld().getName()))
+                    borderSizeRadius = customMaxRadius.get(chunkLocation.getWorld().getName());
+                if (borderSizeRadius > -1 && chunkLocation.distanceSquared(chunkLocation.getWorld().getSpawnLocation()) > borderSizeRadius * borderSizeRadius)
                     return;
 
                 Location location = randomLocation(chunk, 2);
@@ -132,25 +148,30 @@ public class WormholeSpawner implements Listener
         World world = worlds.get(r4nd0m(0, worlds.size() - 1));
         if (isVanillaNether(world))
             maxY = 126;
-        Location borderCenter;
-        int borderSize;
+        Location borderCenter = world.getSpawnLocation();
+        int borderSizeRadius = maxRadius;
+        if (customMaxRadius.containsKey(world.getName()))
+            borderSizeRadius = customMaxRadius.get(world.getName());
 
-        if (world.getWorldBorder() == null || world.getWorldBorder().getCenter() == null) //Apparently this can be null......
+        if (borderSizeRadius < 0)
         {
-            borderCenter = new Location(world, 0, 0, 0);
-            borderSize = 60000000;
-        }
-        else
-        {
-            borderCenter = world.getWorldBorder().getCenter();
-            borderSize = (int)(world.getWorldBorder().getSize() / 2) - 500; //i.e. world must have a border radius above 1000
+            if (world.getWorldBorder() == null || world.getWorldBorder().getCenter() == null) //Apparently this can be null......
+            {
+                borderSizeRadius = 60000000 / 2;
+            }
+            else
+            {
+                borderCenter = world.getWorldBorder().getCenter();
+                borderSizeRadius = (int)(world.getWorldBorder().getSize() / 2) - 20;
+            }
         }
 
-        if (borderSize <= 0)
+
+        if (borderSizeRadius <= 0)
             return randomLocation(initialLocation, --attempts, worlds);
 
-        int randomX = r4nd0m(borderCenter.getBlockX() - borderSize, borderCenter.getBlockX() + borderSize);
-        int randomZ = r4nd0m(borderCenter.getBlockZ() - borderSize, borderCenter.getBlockZ() + borderSize);
+        int randomX = r4nd0m(borderCenter.getBlockX() - borderSizeRadius, borderCenter.getBlockX() + borderSizeRadius);
+        int randomZ = r4nd0m(borderCenter.getBlockZ() - borderSizeRadius, borderCenter.getBlockZ() + borderSizeRadius);
 
         Location location = new Location(world, randomX, r4nd0m(7, maxY), randomZ);
 
