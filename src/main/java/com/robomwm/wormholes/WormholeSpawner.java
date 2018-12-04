@@ -103,7 +103,7 @@ public class WormholeSpawner implements Listener
                 //TODO: debug
                 plugin.getLogger().info("Spawned a wormhole at " + location.toString() + "\nWith the other side at " + otherSide.toString());
             }
-        }.runTaskTimer(plugin, 1200L, 1200L);
+        }.runTaskTimer(plugin, 20L, 400L);
     }
 
     @EventHandler
