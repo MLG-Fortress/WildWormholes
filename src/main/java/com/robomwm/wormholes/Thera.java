@@ -41,6 +41,11 @@ public class Thera
         return wormhole;
     }
 
+    public int quantityOfExistingWormholes()
+    {
+        return wormholes.size();
+    }
+
     private void wormholeMaintenanceTask()
     {
         for (Wormhole wormhole : wormholes)

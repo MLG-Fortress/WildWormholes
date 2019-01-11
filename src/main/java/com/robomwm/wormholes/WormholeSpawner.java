@@ -50,12 +50,11 @@ public class WormholeSpawner implements Listener
             @Override
             public void run()
             {
-                //TODO: think of good randomization to determine if we should spawn a portal (perhaps based on amount of players/unique players and currently-existing wormholes?)
-//                if (r4nd0m(0, 5) > 4)
-//                    return;
-
                 //If nobody's on, there are not many chunks to decide where to spawn.
                 if (instance.getServer().getOnlinePlayers().isEmpty())
+                    return;
+
+                if (r4nd0m(0, thera.quantityOfExistingWormholes()) < 2)
                     return;
 
                 //A more efficient way would be to maintain collection state on world loads/unloads
@@ -109,7 +108,7 @@ public class WormholeSpawner implements Listener
                 });
 
             }
-        }.runTaskTimer(plugin, 20L, 400L);
+        }.runTaskTimer(plugin, 20L, 200L);
     }
 
     @EventHandler
