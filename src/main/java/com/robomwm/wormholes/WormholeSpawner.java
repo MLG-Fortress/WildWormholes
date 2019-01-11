@@ -1,8 +1,10 @@
 package com.robomwm.wormholes;
 
+import io.papermc.lib.PaperLib;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,6 +19,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -90,18 +93,21 @@ public class WormholeSpawner implements Listener
                     return;
 
                 Location location = randomLocation(chunk, 2);
-                Location otherSide = randomLocation(location, 2, worlds);
-                if (location == null || otherSide == null)
+                if (location == null)
                     return;
+                //Location otherSide = randomLocation(location, 2, worlds);
+                asyncRandomLocation(location, worlds).thenAccept(otherSide ->
+                {
+                    thera.addWormhole(86400, 3000, location, otherSide);
 
-                thera.addWormhole(86400, 3000, location, otherSide);
+                    //Build newly-spawned wormholes
+                    thera.buildWormholes(chunk);
+                    thera.buildWormholes(otherSide.getChunk());
 
-                //Build newly-spawned wormholes
-                thera.buildWormholes(chunk);
-                thera.buildWormholes(otherSide.getChunk());
+                    //TODO: debug
+                    plugin.getLogger().info("Spawned a wormhole at " + location.toString() + "\nWith the other side at " + otherSide.toString());
+                });
 
-                //TODO: debug
-                plugin.getLogger().info("Spawned a wormhole at " + location.toString() + "\nWith the other side at " + otherSide.toString());
             }
         }.runTaskTimer(plugin, 20L, 400L);
     }
@@ -138,7 +144,9 @@ public class WormholeSpawner implements Listener
      * @param attempts
      * @param worlds
      * @return
+     * @deprecated Causes synchronous chunk loading/generation
      */
+    @Deprecated
     private Location randomLocation(Location initialLocation, int attempts, List<World> worlds)
     {
         if (initialLocation == null || attempts < 0)
@@ -181,6 +189,48 @@ public class WormholeSpawner implements Listener
             return randomLocation(initialLocation, --attempts, worlds); //otherwise try again
 
         return location;
+    }
+
+    private CompletableFuture<Location> asyncRandomLocation(Location initialLocation, List<World> worlds)
+    {
+        int maxY = 200;
+        World world = worlds.get(r4nd0m(0, worlds.size() - 1));
+        if (isVanillaNether(world))
+            maxY = 126;
+        Location borderCenter = world.getSpawnLocation();
+        int borderSizeRadius = maxRadius;
+        if (customMaxRadius.containsKey(world.getName()))
+            borderSizeRadius = customMaxRadius.get(world.getName());
+
+        if (borderSizeRadius < 0)
+        {
+            if (world.getWorldBorder() == null || world.getWorldBorder().getCenter() == null) //Apparently this can be null......
+            {
+                borderSizeRadius = 60000000 / 2;
+            }
+            else
+            {
+                borderCenter = world.getWorldBorder().getCenter();
+                borderSizeRadius = (int) (world.getWorldBorder().getSize() / 2) - 20;
+            }
+        }
+
+        if (borderSizeRadius <= 0)
+            return CompletableFuture.completedFuture(null);
+
+        int randomX = r4nd0m(borderCenter.getBlockX() - borderSizeRadius, borderCenter.getBlockX() + borderSizeRadius);
+        int randomZ = r4nd0m(borderCenter.getBlockZ() - borderSizeRadius, borderCenter.getBlockZ() + borderSizeRadius);
+
+        Location location = new Location(world, randomX, r4nd0m(7, maxY), randomZ);
+
+        return PaperLib.getChunkAtAsync(location, false).thenCompose(chunk ->
+        {
+            //Make sure it's not right next to the initial location (rare) and if it's ok to destroy blocks here
+            if ((location.getWorld() == initialLocation.getWorld() && location.distanceSquared(initialLocation) < 500)
+                    || !isOkayToDestroy(location))
+                return CompletableFuture.completedFuture(null);
+            return CompletableFuture.completedFuture(location);
+        });
     }
 
     /**
@@ -229,9 +279,11 @@ public class WormholeSpawner implements Listener
         if (world.getEnvironment() != World.Environment.NETHER)
             return false;
 
-        if (world.getLoadedChunks().length == 0)
-            world.loadChunk(0, 0);
-        return world.getLoadedChunks()[0].getBlock(0, 127, 0).getType() == Material.BEDROCK;
+        return world.getGenerator() == null;
+
+//        if (world.getLoadedChunks().length == 0)
+//            world.loadChunk(0, 0);
+//        return world.getLoadedChunks()[0].getBlock(0, 127, 0).getType() == Material.BEDROCK;
     }
 
     //Entirely reliant on the wormhole dimensions

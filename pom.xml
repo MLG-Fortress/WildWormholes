@@ -15,7 +15,7 @@
     <repositories>
         <repository>
             <id>paper-repo</id>
-            <url>https://repo.destroystokyo.com/repository/maven-public/</url>
+            <url>https://papermc.io/repo/repository/maven-public/</url>
         </repository>
         <repository>
             <id>CodeMC</id>
@@ -44,12 +44,17 @@
                     <artifactSet>
                         <includes>
                             <include>org.bstats:bstats-bukkit</include>
+                            <include>io.papermc:paperlib</include>
                         </includes>
                     </artifactSet>
                     <relocations>
                         <relocation>
                             <pattern>org.bstats</pattern>
                             <shadedPattern>com.robomwm.wormholes</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>io.papermc.lib</pattern>
+                            <shadedPattern>com.robomwm.wormholes.paperlib</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
@@ -76,6 +81,12 @@
             <groupId>org.bstats</groupId>
             <artifactId>bstats-bukkit</artifactId>
             <version>1.4</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.papermc</groupId>
+            <artifactId>paperlib</artifactId>
+            <version>1.0.1</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
