@@ -97,7 +97,10 @@ public class Thera
 
         Wormhole wormhole = getWormhole(chunk);
         if (wormhole != null)
+        {
+            System.out.println("Building wormhole at " + wormhole.getLocation());
             wormhole.build(false);
+        }
 
         building = false;
     }
