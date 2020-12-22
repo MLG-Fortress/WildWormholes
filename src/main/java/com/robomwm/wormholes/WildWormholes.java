@@ -44,7 +44,7 @@ public class WildWormholes extends JavaPlugin
         new WormholeTransporter(this, thera);
         try
         {
-            new Metrics(this).addCustomChart(new Metrics.SimplePie("bukkit_implementation", new Callable<String>()
+            new Metrics(this, 3412).addCustomChart(new Metrics.SimplePie("bukkit_implementation", new Callable<String>()
             {
                 @Override
                 public String call() throws Exception
